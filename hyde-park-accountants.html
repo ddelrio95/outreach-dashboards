@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sample Dashboard — Hyde Park Accountants</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f0f4f8; color: #1a202c; }
+  .banner { background: linear-gradient(135deg, #1a365d 0%, #2a4a7f 100%); color: white; padding: 24px 36px; display: flex; justify-content: space-between; align-items: center; }
+  .banner h1 { font-size: 20px; font-weight: 700; }
+  .banner p { font-size: 12px; opacity: 0.75; margin-top: 3px; }
+  .badge { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 20px; padding: 5px 14px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 28px 20px; }
+  .intro { background: white; border-radius: 10px; padding: 20px 24px; margin-bottom: 24px; border-left: 4px solid #2a4a7f; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .intro h2 { font-size: 15px; color: #1a365d; margin-bottom: 6px; }
+  .intro p { font-size: 13px; color: #4a5568; line-height: 1.6; }
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+  .kpi { background: white; border-radius: 10px; padding: 18px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .kpi-label { font-size: 11px; color: #718096; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  .kpi-value { font-size: 28px; font-weight: 700; color: #1a365d; margin: 5px 0 2px; }
+  .kpi-sub { font-size: 11px; font-weight: 600; }
+  .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 24px; }
+  .chart-card { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .chart-card h3 { font-size: 13px; font-weight: 700; color: #2d3748; margin-bottom: 14px; }
+  .table-card { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-bottom: 24px; }
+  .table-card h3 { font-size: 13px; font-weight: 700; color: #2d3748; margin-bottom: 14px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { text-align: left; color: #718096; font-weight: 600; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; padding: 0 10px 8px 0; }
+  td { padding: 9px 10px 9px 0; border-top: 1px solid #edf2f7; color: #2d3748; }
+  .status-pill { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 10px; font-weight: 700; }
+  .status-pill.done { background: #c6f6d5; color: #276749; }
+  .status-pill.review { background: #bee3f8; color: #2b6cb0; }
+  .status-pill.waiting { background: #fefcbf; color: #b7791f; }
+  .status-pill.overdue { background: #fed7d7; color: #c53030; }
+  .cta-section { background: linear-gradient(135deg, #1a365d 0%, #2a4a7f 100%); border-radius: 10px; padding: 28px 36px; text-align: center; color: white; }
+  .cta-section h2 { font-size: 18px; margin-bottom: 8px; }
+  .cta-section p { font-size: 13px; opacity: 0.85; margin-bottom: 18px; }
+  .cta-btn { display: inline-block; background: white; color: #1a365d; font-weight: 700; font-size: 13px; padding: 10px 24px; border-radius: 7px; text-decoration: none; }
+  .footer { text-align: center; padding: 20px; font-size: 11px; color: #a0aec0; }
+  canvas { max-height: 200px; }
+</style>
+</head>
+<body>
+<div class="banner">
+  <div>
+    <h1>Hyde Park Accountants — Sample Dashboard</h1>
+    <p>Built by Dario Del Rio · Data, Operations &amp; Development Consultant · Tampa, FL · June 14, 2026</p>
+  </div>
+  <span class="badge">Interactive Preview</span>
+</div>
+<div class="container">
+  <div class="intro">
+    <h2>This is a sample of what your team could see every day.</h2>
+    <p>Built to show how return status, document collection, and workload can live in one place — no rebuilding trackers by hand during busy season.</p>
+  </div>
+  <div class="kpi-grid">
+        <div class="kpi">
+          <div class="kpi-label">Active Returns</div>
+          <div class="kpi-value">92</div>
+          <div class="kpi-sub" style="color:#48bb78">+9 from last week</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Docs Pending</div>
+          <div class="kpi-value">22</div>
+          <div class="kpi-sub" style="color:#ed8936">⚠ 4 past 7-day reminder</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Filed This Month</div>
+          <div class="kpi-value">58</div>
+          <div class="kpi-sub" style="color:#48bb78">↑ On track</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Overdue</div>
+          <div class="kpi-value">7</div>
+          <div class="kpi-sub" style="color:#fc8181">Needs attention</div>
+        </div></div>
+  <div class="charts-grid">
+    <div class="chart-card"><h3>Returns Filed by Week</h3><canvas id="c1"></canvas></div>
+    <div class="chart-card"><h3>Pipeline Status</h3><canvas id="c2"></canvas></div>
+  </div>
+  <div class="table-card">
+    <h3>Detailed View</h3>
+    <table><thead><tr><th>Client</th><th>Type</th><th>Assigned To</th><th>Docs</th><th>Due Date</th><th>Status</th></tr></thead><tbody><tr><td>Martinez Holdings LLC</td><td>1065 Partnership</td><td>Sarah K.</td><td>✓ Complete</td><td>Jun 15</td><td><span class="status-pill review">review</span></td></tr><tr><td>Hernandez, Marta</td><td>1040 Individual</td><td>James P.</td><td>⚠ Missing W-2</td><td>Jun 17</td><td><span class="status-pill waiting">waiting</span></td></tr><tr><td>Tampa Bay Tile Co.</td><td>1120-S S-Corp</td><td>Sarah K.</td><td>✓ Complete</td><td>Jun 10</td><td><span class="status-pill done">done</span></td></tr><tr><td>Rivera, Carlos & Ana</td><td>1040 Individual</td><td>Tom A.</td><td>⚠ Missing 1099</td><td>Jun 8</td><td><span class="status-pill overdue">overdue</span></td></tr><tr><td>Suncoast Catering LLC</td><td>1065 Partnership</td><td>James P.</td><td>✓ Complete</td><td>Jun 20</td><td><span class="status-pill review">review</span></td></tr><tr><td>Chen, David</td><td>1040 + Sch C</td><td>Tom A.</td><td>✓ Complete</td><td>Jun 14</td><td><span class="status-pill done">done</span></td></tr></tbody></table>
+  </div>
+  <div class="cta-section">
+    <h2>Want to see this live for Hyde Park Accountants?</h2>
+    <p>15 minutes, no setup on your end. I'll walk through how it connects to your real data.</p>
+    <a class="cta-btn" href="mailto:ddelrio.dev@gmail.com?subject=Dashboard demo - Hyde Park Accountants">Schedule 15 Minutes</a>
+  </div>
+</div>
+<div class="footer">Dario Del Rio &middot; ddelrio.dev@gmail.com &middot; 813-220-6280 &middot; Tampa, FL</div>
+<script>
+new Chart(document.getElementById('c1'), {
+  type: 'bar',
+  data: { labels: ["May 5", "May 12", "May 19", "May 26", "Jun 2", "Jun 9", "Jun 16"], datasets: [{ label: 'Returns Filed by Week', data: [10, 11, 14, 10, 9, 9, 14], backgroundColor: '#2a4a7f', borderRadius: 5 }] },
+  options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: '#edf2f7' } }, x: { grid: { display: false } } } }
+});
+new Chart(document.getElementById('c2'), {
+  type: 'doughnut',
+  data: { labels: ["Filed", "In Review", "Waiting Docs", "Overdue"], datasets: [{ data: [47, 18, 14, 5], backgroundColor: ["#48bb78", "#4299e1", "#ed8936", "#fc8181"], borderWidth: 0 }] },
+  options: { plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } }, cutout: '62%' }
+});
+</script>
+<div id="expiry-overlay" style="display:none;position:fixed;inset:0;background:rgba(15,20,40,0.92);z-index:9999;align-items:center;justify-content:center;flex-direction:column;color:white;text-align:center;padding:40px"><h2 style="font-size:22px;font-weight:700;margin-bottom:12px">This preview has expired</h2><p style="font-size:14px;opacity:0.8;max-width:400px;line-height:1.6;margin-bottom:20px">The sample dashboard for Hyde Park Accountants was available for a limited time. Reach out to Dario to schedule a live walkthrough.</p><a href="mailto:ddelrio.dev@gmail.com?subject=Dashboard+demo+-+Hyde+Park+Accountants" style="display:inline-block;background:white;color:#1a365d;font-weight:700;font-size:13px;padding:12px 28px;border-radius:7px;text-decoration:none">Contact Dario</a></div><script>(function(){var expiry=new Date("2026-06-28T23:59:59");if(new Date()>expiry){var el=document.getElementById("expiry-overlay");el.style.display="flex";document.body.style.overflow="hidden";}})();</script>
+</body>
+</html>
